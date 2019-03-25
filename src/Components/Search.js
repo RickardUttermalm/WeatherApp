@@ -3,11 +3,16 @@ import Forecast from './Forecast';
 
 export default class Search extends Component
 {
-    // constructor(props)
-    // {
-    //     super(props);
-        
-    // }
+    constructor(props)
+    {
+        super(props);
+        this.state={
+            location: {},
+            forecast: {},
+            current: {},
+            condition: {}
+        };
+    }
 
     componentDidMount()
     {
@@ -15,12 +20,26 @@ export default class Search extends Component
             navigator.geolocation.getCurrentPosition((res) => {
                 fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=
                        ${res.coords.latitude},${res.coords.longitude}&days=5`)
-                .then(res => res.json())
-                .then(json => console.log(json));
-            });
-          } else {
+                .then(prom => prom.json())
+                .then(json => this.setState({location: json.location,
+                                             forecast: json.forecast,
+                                             current: json.current,
+                                             condition: json.current.condition}))});
+                                             
+        }
+        else {
             
-          }
+        }
+    }
+
+    getForecast = (loc) =>
+    {
+        fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=${loc}&days=5`)
+        .then(res => res.json())
+        .then(json => this.setState({location: json.location,
+                                     forecast: json.forecast,
+                                     current: json.current,
+                                     condition: json.current.condition}));
     }
 
     render()
@@ -33,12 +52,14 @@ export default class Search extends Component
                     <div className="row">
                         <div className="col-12">
                             <br/>
-                            <input type="text" list="autocomplete"/>
+                            <input type="text" list="autocomplete" ref={(loc) => this.searchtext = loc}/>
+                            <button onClick={() => this.getForecast(this.searchtext.value)}>Sök</button>
                             <datalist id="autocomplete"></datalist>
                         </div>
                     </div>
                     <div className="row">
-                        <Forecast/>
+                        <Forecast location={this.state.location} forecast={this.state.forecast} current={this.state.current}
+                        condition={this.state.condition}/>
                     </div>
                 </div>
                 <div className="col-sm-0 col-md-4"></div>      
