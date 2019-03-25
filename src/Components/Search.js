@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Current from './Current';
 import Forecast from './Forecast';
 
 export default class Search extends Component
@@ -8,7 +9,7 @@ export default class Search extends Component
         super(props);
         this.state={
             location: {},
-            forecast: {},
+            forecast: [],
             current: {},
             condition: {}
         };
@@ -19,7 +20,7 @@ export default class Search extends Component
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((res) => {
                 fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=
-                       ${res.coords.latitude},${res.coords.longitude}&days=5`)
+                       ${res.coords.latitude},${res.coords.longitude}&days=6`)
                 .then(prom => prom.json())
                 .then(json => this.setState({location: json.location,
                                              forecast: json.forecast,
@@ -34,7 +35,7 @@ export default class Search extends Component
 
     getForecast = (loc) =>
     {
-        fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=${loc}&days=5`)
+        fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=${loc}&days=6`)
         .then(res => res.json())
         .then(json => this.setState({location: json.location,
                                      forecast: json.forecast,
@@ -58,8 +59,11 @@ export default class Search extends Component
                         </div>
                     </div>
                     <div className="row">
-                        <Forecast location={this.state.location} forecast={this.state.forecast} current={this.state.current}
+                        <Current location={this.state.location} forecast={this.state.forecast} current={this.state.current}
                         condition={this.state.condition}/>
+                    </div>
+                    <div className="row">
+                        <Forecast forecast={this.state.forecast.forecastday}/>
                     </div>
                 </div>
                 <div className="col-sm-0 col-md-4"></div>      
