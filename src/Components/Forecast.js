@@ -5,7 +5,7 @@ export default class Forecast extends Component
 {
     render()
     {
-        console.log(this.props.forecast);
+        console.log(this.props.forecast.forecastday);
 
         var test = this.props.forecast;
         console.log(test);
