@@ -5,13 +5,9 @@ export default class Forecast extends Component
 {
     render()
     {
-        console.log(this.props.forecast.forecastday);
-
-        var test = this.props.forecast;
-        console.log(test);
-
+        console.log(this.props.dates[1])
         return(
-            <div className="row"></div>
+            <div className="row"><p>{this.props.dates[1]}</p></div>
         );
     }
 }
