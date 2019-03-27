@@ -12,7 +12,10 @@ export default class Search extends Component
             current: {},
             condition: {},
             forecast: {},
-            dates: []
+            dates: [],
+            icons: [],
+            maxtemps: [],
+            mintemps: [] 
         };
     }
 
@@ -23,13 +26,7 @@ export default class Search extends Component
                 fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=
                        ${res.coords.latitude},${res.coords.longitude}&days=6`)
                 .then(prom => prom.json())
-                .then(json => this.updatestate(json))});
-            // const prom = await fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=
-            //                       ${res.coords.latitude},${res.coords.longitude}&days=6`);
-            // const data = await prom.json();
-            // console.log(data.forecast.forecastday[2].date);
-            // this.updatestate(data);
-            //})                       
+                .then(json => this.updatestate(json))});                      
         }
         else {
             
@@ -40,25 +37,30 @@ export default class Search extends Component
     {
         fetch(`http://api.apixu.com/v1/forecast.json?key=2ab5aa03cc244d079ba82038192203&q=${loc}&days=6`)
         .then(res => res.json())
-        .then(json => this.setState({location: json.location,
-                                     forecast: json.forecast,
-                                     current: json.current,
-                                     condition: json.current.condition}));
+        .then(json => this.updatestate(json));
     }
     updatestate(data)
     {
-        console.log(data.forecast.forecastday[2].date);
+        console.log(data);
         const dates = [];
+        const icons = [];
+        const maxtemps = [];
+        const mintemps = []
+        console.log(data.forecast.forecastday[1].day);
         data.forecast.forecastday.forEach(item => {
-            dates.push(item.date);
+            dates.push(item.date.substring(5, 10));
+            icons.push(item.day.condition.icon);
+            maxtemps.push(item.day.maxtemp_c);
+            mintemps.push(item.day.mintemp_c);
         });
-        console.log(dates);
-
         this.setState({location: data.location,
                        current: data.current,
                        condition: data.current.condition,
                        forecast: data.forecast.forecastday,
-                       dates: dates
+                       dates: dates,
+                       icons: icons,
+                       maxtemps: maxtemps,
+                       mintemps: mintemps
                     })
     }
 
@@ -82,7 +84,7 @@ export default class Search extends Component
                         condition={this.state.condition}/>
                     </div>
                     <div className="row">
-                        <Forecast dates={this.state.dates}/>
+                        <Forecast dates={this.state.dates} icons={this.state.icons} maxtemps={this.state.maxtemps} mintemps={this.state.mintemps}/>
                     </div>
                 </div>
                 <div className="col-sm-0 col-md-4"></div>      

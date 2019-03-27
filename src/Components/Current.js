@@ -5,10 +5,6 @@ export default class Current extends Component
 {
     render()
     {
-        console.log(this.props.location);
-        console.log(this.props.forecast);
-        console.log(this.props.current);
-        console.log(this.props.condition);
         return(
         <div>
             <div className="row">

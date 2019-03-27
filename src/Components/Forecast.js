@@ -5,9 +5,17 @@ export default class Forecast extends Component
 {
     render()
     {
-        console.log(this.props.dates[1])
+        var divlist = [];
+        for(let i = 1; i < 6; i++)
+        {
+            divlist.push(<Day date={this.props.dates[i]} icon={this.props.icons[i]}
+                         maxtemp={this.props.maxtemps[i]} mintemp={this.props.mintemps[i]}/>)
+        }
+
         return(
-            <div className="row"><p>{this.props.dates[1]}</p></div>
+            <div className="row">
+                {divlist}
+            </div>
         );
     }
 }
