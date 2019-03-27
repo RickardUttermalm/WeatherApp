@@ -9,7 +9,8 @@ export default class Current extends Component
         <div>
             <div className="row">
                 <div className="col-12 text-center">
-                    <h3>{this.props.location.name}</h3>
+                    <h3>{this.props.location.name}<i className="fa fa-star-o" 
+                         onClick={() => this.props.updatefavorites(this.props.location.name)}></i></h3>
                 </div>
             </div>
             <div className="row">

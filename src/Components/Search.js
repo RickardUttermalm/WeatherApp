@@ -31,6 +31,7 @@ export default class Search extends Component
         else {
             
         }
+        this.getFavorites();
     }
 
     getForecast = (loc) =>
@@ -64,6 +65,19 @@ export default class Search extends Component
                     })
     }
 
+    updatefavorites = (loc) => 
+    {
+        var favs = localStorage.getItem("wafavorites");
+        if(favs.includes(loc))
+        {
+            
+        }
+    }
+    getFavorites()
+    {
+
+    }
+
     render()
     {
         return(
@@ -74,14 +88,14 @@ export default class Search extends Component
                     <div className="row">
                         <div className="col-12">
                             <br/>
-                            <input type="text" list="autocomplete" ref={(loc) => this.searchtext = loc}/>
+                            <input type="text" ref={(loc) => this.searchtext = loc}/>
                             <button onClick={() => this.getForecast(this.searchtext.value)}>Sök</button>
-                            <datalist id="autocomplete"></datalist>
+                            <select id="favorites"></select>
                         </div>
                     </div>
                     <div className="row">
                         <Current location={this.state.location} forecast={this.state.forecast} current={this.state.current}
-                        condition={this.state.condition}/>
+                        condition={this.state.condition} updatefavorites = {this.updatefavorites}/>
                     </div>
                     <div className="row">
                         <Forecast dates={this.state.dates} icons={this.state.icons} maxtemps={this.state.maxtemps} mintemps={this.state.mintemps}/>
