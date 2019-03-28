@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Current from './Current';
 import Forecast from './Forecast';
+import Favorites from './Favorites';
 
 export default class Search extends Component
 {
@@ -31,7 +32,6 @@ export default class Search extends Component
         else {
             
         }
-        this.getFavorites();
     }
 
     getForecast = (loc) =>
@@ -65,18 +65,6 @@ export default class Search extends Component
                     })
     }
 
-    updatefavorites = (loc) => 
-    {
-        var favs = localStorage.getItem("wafavorites");
-        if(favs.includes(loc))
-        {
-            
-        }
-    }
-    getFavorites()
-    {
-
-    }
 
     render()
     {
@@ -90,12 +78,12 @@ export default class Search extends Component
                             <br/>
                             <input type="text" ref={(loc) => this.searchtext = loc}/>
                             <button onClick={() => this.getForecast(this.searchtext.value)}>Sök</button>
-                            <select id="favorites"></select>
+                            <Favorites />
                         </div>
                     </div>
                     <div className="row">
                         <Current location={this.state.location} forecast={this.state.forecast} current={this.state.current}
-                        condition={this.state.condition} updatefavorites = {this.updatefavorites}/>
+                        condition={this.state.condition}/>
                     </div>
                     <div className="row">
                         <Forecast dates={this.state.dates} icons={this.state.icons} maxtemps={this.state.maxtemps} mintemps={this.state.mintemps}/>

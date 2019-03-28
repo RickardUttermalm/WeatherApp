@@ -1,3 +1,7 @@
 #condimg{
   height:100px;
 }
+
+i:hover{
+  cursor: pointer;
+}
