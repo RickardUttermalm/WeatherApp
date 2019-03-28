@@ -16,7 +16,8 @@ export default class Search extends Component
             dates: [],
             icons: [],
             maxtemps: [],
-            mintemps: [] 
+            mintemps: [],
+            favorites: []
         };
     }
 
@@ -32,6 +33,8 @@ export default class Search extends Component
         else {
             
         }
+        
+        this.setState({favorites: JSON.parse(localStorage.getItem("wafavorites"))});
     }
 
     getForecast = (loc) =>
@@ -64,7 +67,31 @@ export default class Search extends Component
                        mintemps: mintemps
                     })
     }
+    managefavorites = (loc) => 
+    {
+        
+        var favs = JSON.parse(localStorage.getItem("wafavorites"));
+        console.log(favs);
+        if(favs == null)
+        {
+            favs = [];
+        }
 
+        if(favs.includes(loc))
+        {
+            for (var i=favs.length-1; i>=0; i--) {
+                if (favs[i] === loc) {
+                    favs.splice(i, 1);
+                }
+            }
+        }
+        else
+        {
+            favs.push(loc);
+        }
+        localStorage.setItem("wafavorites", JSON.stringify(favs));
+        this.setState({favorites: favs});
+    }
 
     render()
     {
@@ -78,12 +105,12 @@ export default class Search extends Component
                             <br/>
                             <input type="text" ref={(loc) => this.searchtext = loc}/>
                             <button onClick={() => this.getForecast(this.searchtext.value)}>Sök</button>
-                            <Favorites />
+                            <Favorites favs={this.state.favorites} getforecast={this.getForecast}/>
                         </div>
                     </div>
                     <div className="row">
                         <Current location={this.state.location} forecast={this.state.forecast} current={this.state.current}
-                        condition={this.state.condition}/>
+                        condition={this.state.condition} managefavorites={this.managefavorites}/>
                     </div>
                     <div className="row">
                         <Forecast dates={this.state.dates} icons={this.state.icons} maxtemps={this.state.maxtemps} mintemps={this.state.mintemps}/>

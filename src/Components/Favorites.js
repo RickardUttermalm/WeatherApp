@@ -4,8 +4,8 @@ export default class Favorites extends Component
 {
     render()
     {
-        var favs = JSON.parse(localStorage.getItem("wafavorites"));
-        if(favs == null)
+        var favs = this.props.favs;
+        if(favs.lenght === 0)
         {
             return;
         }
@@ -15,7 +15,8 @@ export default class Favorites extends Component
                 return(<option>{item}</option>);
             });
             return(
-                <select id="favorites">{options}</select>
+                <select id="favorites" ref={(loc) => this.searchtext = loc} 
+                onChange={() => this.props.getforecast(this.searchtext.value)}>{options}</select>
             );
         }
     }
