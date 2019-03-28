@@ -17,7 +17,8 @@ export default class Search extends Component
             icons: [],
             maxtemps: [],
             mintemps: [],
-            favorites: []
+            favorites: [],
+            invalidinput: Boolean
         };
     }
 
@@ -31,7 +32,7 @@ export default class Search extends Component
                 .then(json => this.updatestate(json))});                      
         }
         else {
-            
+            this.getForecast("Stockholm");
         }
         
         this.setState({favorites: JSON.parse(localStorage.getItem("wafavorites"))});
@@ -45,27 +46,32 @@ export default class Search extends Component
     }
     updatestate(data)
     {
-        console.log(data);
-        const dates = [];
-        const icons = [];
-        const maxtemps = [];
-        const mintemps = []
-        console.log(data.forecast.forecastday[1].day);
-        data.forecast.forecastday.forEach(item => {
-            dates.push(item.date.substring(5, 10));
-            icons.push(item.day.condition.icon);
-            maxtemps.push(item.day.maxtemp_c);
-            mintemps.push(item.day.mintemp_c);
-        });
-        this.setState({location: data.location,
-                       current: data.current,
-                       condition: data.current.condition,
-                       forecast: data.forecast.forecastday,
-                       dates: dates,
-                       icons: icons,
-                       maxtemps: maxtemps,
-                       mintemps: mintemps
-                    })
+        try {
+            console.log(data);
+            const dates = [];
+            const icons = [];
+            const maxtemps = [];
+            const mintemps = []
+            data.forecast.forecastday.forEach(item => {
+                dates.push(item.date.substring(5, 10));
+                icons.push(item.day.condition.icon);
+                maxtemps.push(item.day.maxtemp_c);
+                mintemps.push(item.day.mintemp_c);
+            });
+            this.setState({location: data.location,
+                           current: data.current,
+                           condition: data.current.condition,
+                           forecast: data.forecast.forecastday,
+                           dates: dates,
+                           icons: icons,
+                           maxtemps: maxtemps,
+                           mintemps: mintemps,
+                           invalidinput: false
+                        })
+        } catch (error) {
+            console.log(error);
+            this.setState({invalidinput: true});
+        }
     }
     managefavorites = (loc) => 
     {
@@ -96,21 +102,22 @@ export default class Search extends Component
     render()
     {
         return(
-        <div className="container-fluid">
+        <div className="container-fluid" id="maincontainer">
             <div className="row">
                 <div className="col-sm-0 col-lg-4"></div>
                 <div className="col-sm-12 col-lg-4">
                     <div className="row">
                         <div className="col-12">
                             <br/>
-                            <input type="text" ref={(loc) => this.searchtext = loc}/>
-                            <button onClick={() => this.getForecast(this.searchtext.value)}>Sök</button>
+                            <input className="searchinput" type="text" ref={(loc) => this.searchtext = loc}/>
+                            <button className="searchbtn btn" onClick={() => this.getForecast(this.searchtext.value)}>Sök</button>
                             <Favorites favs={this.state.favorites} getforecast={this.getForecast}/>
                         </div>
                     </div>
                     <div className="row">
                         <Current location={this.state.location} forecast={this.state.forecast} current={this.state.current}
-                        condition={this.state.condition} managefavorites={this.managefavorites}/>
+                        condition={this.state.condition} managefavorites={this.managefavorites} 
+                        invalidinput={this.state.invalidinput}/>
                     </div>
                     <div className="row">
                         <Forecast dates={this.state.dates} icons={this.state.icons} maxtemps={this.state.maxtemps} mintemps={this.state.mintemps}/>

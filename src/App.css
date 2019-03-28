@@ -5,3 +5,37 @@
 i:hover{
   cursor: pointer;
 }
+
+#errormsg{
+  color:red;
+}
+
+p{
+  margin-bottom: 0;
+}
+
+.searchinput{
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+input, select, button:focus{
+  outline:none;
+}
+
+.daymax{
+  font-weight: 600;
+}
+.daymin{
+  font-weight: 600;
+  color: grey;
+}
+
+.daydate{
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.blueback{
+  background-color: lightblue;
+}

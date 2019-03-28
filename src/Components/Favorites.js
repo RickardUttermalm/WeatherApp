@@ -15,7 +15,7 @@ export default class Favorites extends Component
                 return(<option>{item}</option>);
             });
             return(
-                <select id="favorites" ref={(loc) => this.searchtext = loc} 
+                <select id="favorites" className="searchinput" ref={(loc) => this.searchtext = loc} 
                 onChange={() => this.props.getforecast(this.searchtext.value)}>{options}</select>
             );
         }
